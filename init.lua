@@ -17,64 +17,76 @@ o.wrap = false
 
 --o.mouse = nil
 
-require('lualine').setup {
-	options = {
-		theme = 'onedark'
+require("Packer")
+
+function needs_packer()
+
+	require('lualine').setup {
+		options = {
+			theme = 'onedark'
+		}
 	}
-}
 
-require('todo-comments').setup()
-require('trouble').setup()
+	require('todo-comments').setup()
+	require('trouble').setup()
 
+	require("mason").setup()
+	require("mason-lspconfig").setup()
 
--- NOTE: https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+	-- NOTE: https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+	require("mason-lspconfig").setup_handlers {
+		-- The first entry (without a key) will be the default handler
+		-- and will be called for each installed server that doesn't have
+		-- a dedicated handler.
+		function (server_name) -- default handler (optional)
+			require("lspconfig")[server_name].setup {}
+		end,
+		-- Next, you can provide a dedicated handler for specific servers.
+		-- For example, a handler override for the `rust_analyzer`:
 
-require("mason").setup()
-require("mason-lspconfig").setup()
-
-require("mason-lspconfig").setup_handlers {
-	-- The first entry (without a key) will be the default handler
-	-- and will be called for each installed server that doesn't have
-	-- a dedicated handler.
-	function (server_name) -- default handler (optional)
-		require("lspconfig")[server_name].setup {}
-	end,
-	-- Next, you can provide a dedicated handler for specific servers.
-	-- For example, a handler override for the `rust_analyzer`:
-
-	["sumneko_lua"] = function ()
-		require("lspconfig").sumneko_lua.setup {
-			settings = {
-				Lua = {
-					diagnostics = {
-						globals = {
-							'vim',
-							'love',
-							'awesome',
-							'client',
-							'screen',
-							'root',
+		["sumneko_lua"] = function ()
+			require("lspconfig").sumneko_lua.setup {
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = {
+								'vim',
+								'love',
+								'awesome',
+								'client',
+								'screen',
+								'root',
+							},
+							disable = {'lowercase-global'},
 						},
-						disable = {'lowercase-global'},
-					},
-					telemetry = {
-						enable = false,
+						telemetry = {
+							enable = false,
+						},
 					},
 				},
-			},
-			filetypes = {
-				'lua',
-			},
-		}
-	end
-}
+				filetypes = {
+					'lua',
+				},
+			}
+		end
+	}
 
+	vim.api.nvim_create_autocmd({"VimEnter"}, {command = "CHADopen --nofocus"})
+	vim.cmd 'autocmd BufEnter * if (winnr("$") == 1 && &filetype == "CHADTree") | q | endif'
+
+	vim.cmd 'colorscheme onedark'
+end
+
+if not pcall(needs_packer) then
+	print"you need to run :PackerInstall first"
+end
 
 local chadtree_settings = {
 	theme = {
 		text_colour_set = "nerdtree_syntax_dark",
 	}
 }
+
 vim.api.nvim_set_var("chadtree_settings", chadtree_settings)
 
 
@@ -102,11 +114,5 @@ vim.g.coq_settings = {
 	auto_start = 'shut-up'
 }
 
-vim.api.nvim_create_autocmd({"VimEnter"}, {command = "CHADopen --nofocus"})
-
-vim.cmd 'autocmd BufEnter * if (winnr("$") == 1 && &filetype == "CHADTree") | q | endif'
-
-vim.cmd 'colorscheme onedark'
 vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
 
-require("Packer")
