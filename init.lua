@@ -78,7 +78,7 @@ function needs_packer()
 end
 
 if not pcall(needs_packer) then
-	print"you need to run :PackerInstall first"
+	print"you need to type :PackerInstall first"
 end
 
 local chadtree_settings = {
