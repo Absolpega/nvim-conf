@@ -1,23 +1,8 @@
-local g = vim.g
-local o = vim.o
-
-o.termguicolors = true
-
-o.number = true
-o.relativenumber = true
-
-o.tabstop = 4
---o.softtabstop = 4
-o.shiftwidth = 4
---o.expandtab = true
-
-o.smartindent = true
-
-o.wrap = false
-
---o.mouse = nil
+require("VimSettings")
 
 require("Packer")
+
+local settings = require("Settings")
 
 function needs_packer()
 
@@ -71,7 +56,10 @@ function needs_packer()
 		end
 	}
 
-	vim.api.nvim_create_autocmd({"VimEnter"}, {command = "CHADopen --nofocus"})
+	if settings.auto_open_sidebar then
+		vim.api.nvim_create_autocmd({"VimEnter"}, {command = "CHADopen --nofocus"})
+	end
+
 	vim.cmd 'autocmd BufEnter * if (winnr("$") == 1 && &filetype == "CHADTree") | q | endif'
 
 	vim.cmd 'colorscheme onedark'
@@ -88,7 +76,6 @@ local chadtree_settings = {
 }
 
 vim.api.nvim_set_var("chadtree_settings", chadtree_settings)
-
 
 
 vim.keymap.set('n', '<A-f>', ':CHADopen<CR>')
