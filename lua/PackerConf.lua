@@ -12,8 +12,6 @@ end
 local packer_bootstrap = ensure_packer()
 
 
-
-
 return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 
@@ -42,6 +40,12 @@ return require('packer').startup(function(use)
 	use 'chrisbra/Colorizer'
 
 	use 'joshdick/onedark.vim'
+
+	use 'sainnhe/edge'
+
+	use 'drewtempelmeyer/palenight.vim'
+
+	use 'catppuccin/nvim'
 
 	use 'elkowar/yuck.vim'
 
@@ -74,6 +78,35 @@ return require('packer').startup(function(use)
 			}
 		end
 	}
+
+	use "lukas-reineke/indent-blankline.nvim"
+
+	use({
+		"kylechui/nvim-surround",
+		tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+		config = function()
+			require("nvim-surround").setup({
+				-- Configuration here, or leave empty to use defaults
+			})
+		end
+	})
+
+	use 'hrsh7th/cmp-nvim-lsp'
+	use 'hrsh7th/cmp-buffer'
+	use 'hrsh7th/cmp-path'
+	use 'hrsh7th/cmp-cmdline'
+	use 'hrsh7th/nvim-cmp'
+
+	use "rafamadriz/friendly-snippets"
+
+	use 'L3MON4D3/LuaSnip'
+	use 'saadparwaiz1/cmp_luasnip'
+
+	use 'ziglang/zig.vim'
+	use 'dag/vim-fish'
+	use 'teal-language/vim-teal'
+
+	use 'edubart/nelua-vim'
 
 	if packer_bootstrap then
 		require('packer').sync()

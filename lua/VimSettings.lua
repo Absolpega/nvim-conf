@@ -14,3 +14,5 @@ o.smartindent = true
 
 o.wrap = false
 
+
+o.exrc = true

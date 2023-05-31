@@ -1,6 +1,8 @@
 require("VimSettings")
 
-require("Packer")
+require("PackerConf")
+
+require("NvimCmp")
 
 local settings = require("Settings")
 
@@ -8,7 +10,7 @@ function needs_packer()
 
 	require('lualine').setup {
 		options = {
-			theme = 'onedark'
+			theme = 'catppuccin'
 		}
 	}
 
@@ -55,14 +57,19 @@ function needs_packer()
 			}
 		end
 	}
+	-- mason can't do this one
+	require'lspconfig'.gdscript.setup{}
 
 	if settings.auto_open_sidebar then
 		vim.api.nvim_create_autocmd({"VimEnter"}, {command = "CHADopen --nofocus"})
 	end
 
+	require("luasnip.loaders.from_vscode").lazy_load()
+
 	vim.cmd 'autocmd BufEnter * if (winnr("$") == 1 && &filetype == "CHADTree") | q | endif'
 
-	vim.cmd 'colorscheme onedark'
+	vim.cmd 'colorscheme catppuccin'
+
 end
 
 if not pcall(needs_packer) then
@@ -97,9 +104,9 @@ vim.cmd [[
 :nnoremap <A-l> <C-w>l
 ]]
 
-vim.g.coq_settings = {
-	auto_start = 'shut-up'
-}
+--vim.g.coq_settings = {
+--	auto_start = 'shut-up'
+--}
 
 vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
 
